@@ -1,10 +1,10 @@
 - hosts: localhost
   connection: local
   vars:
-    resource_group: myansible-rg
+    resource_group: ansible-rg
     webapp_name: mywebapp98w4
     plan_name: mywebapp98w4Plan2
-    location: westus2
+    location: uksouth
   tasks:
     - name: Create a resource group
       azure_rm_resourcegroup:
