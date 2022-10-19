@@ -152,9 +152,9 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "Canonical",
-                        "offer": "UbuntuServer",
-                        "sku": "18.04-LTS",
+                        "publisher": "RedHat",
+                        "offer": "RHEL",
+                        "sku": "82gen2",
                         "version": "latest"
                     },
                     "osDisk": {
