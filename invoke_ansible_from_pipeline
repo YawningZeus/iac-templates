@@ -1,0 +1,52 @@
+
+#Continuous Deployment - Invoke ansible from a release pipleine. 
+
+#invoke ansible fro a release pipeline.. azure stop and dealoc VM will not incure any charges..using static IP start and stop a VM a new IP is assigned to the vm, if a dynamic IP is set, as we have static ensures that IP is reserved, important for workloads and applications. 
+
+#create service connection to start and stop virtual machine 
+
+in DevOps create service connection, head to project, settings, Azure Service Connection. select new service connection. next select azure Azure Resource Manager option, then click on next, accept the default configuration option. Click next, select azure subscription connection. from here tie the service down to the resource group the VM is under. Select resrouce group the VM is under, next name service connection i.e stop_start_ubuntu_ansible_vm and save.
+
+#next create release pipelines.. browse back to DevOps Pipelines, then add new release. new pipeline to create new release pipeline. next empty job, so we can create tasks manually. 
+
+
+#first task associate artifact that was made from the build pipeline as a result of our continuous integration we built earlier. to do so add artifact. then select the build pipeline, under source alias give this a unique name for resource purposes. i.e artifact avanti-web. then need to add tasks to complete this release. under stages click on task job in task menu. 
+
+#first task is the VM task.. select Stage 1, click on task job/task menu underneath..first task to add is the VM task to start the VM. if tool is not installed, install Azure Virtual Machine Manager Task, if not installed will prompt you in marketplace, then get it free, add this to the organisation. to configure task. 
+
+#next give VM a unique description, under azure subscription select the subscription we created earlier. to start_stop_ubuntu_ansible_vm
+
+#next select the Resource Group the subscription is under, i.e avanti_IAC
+
+#next name of virtual machine.. i.e avanti-vm
+
+#next task is add the ansible task..
+
+#task menu add agent job then add ansible playbook task.
+
+#for display name give this a unique description. 
+
+#under ansible location, we want to select the remote machine, since our control-node is the ubuntu virtual machine that we created earlier. 
+
+#next under ssh endpoint select the ansible SSH endpoint.
+
+#under playbook we want to select the location that our ansible playbook is in. since this was packaged as a artifact, in our build pipeline under the root menu choose the root folder where the ansible playbook script is in. 
+
+#under File path Specify the path to the playbook file to be executed on the Ansible machine relative to root path. Playbooks  declare Ansible’s configuration, deployment, and orchestration steps in YAML format.
+
+#add file path i.e create_app_service.yml
+
+add Inventory, i.e Inventory location select Host List, why we do this as for now sometimes the release pipeline will fail even if a warning is printed. 
+
+#hostlist is public ip of the VM
+
+#deselect Fail on STDERR
+
+#by adding this Task ansible will now run our playbook on the ubuntu VM that we created, which also has a service principle to our azure environment. from there as a result of the playbook, a App Service Plan and a App Service will be created. Sometimes creating the infastructure takes a few seconds to be deployed in azure. To avoid any errors in the release pipelines we want to make sure the next task, runs after 5-10 seconds after the ansible task has been completed. This will ensure that the ansible infastrucutre we have built, in this case the app service plan and the app service have been deployed in azure. to add a wait task, search for a wait task..
+
+#add wait task, if not installed, should see a get it free button and install and add this to organisation. same steps used when installing ansible 
+
+#to config click on wait task. 
+
+
+

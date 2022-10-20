@@ -1,0 +1,134 @@
+#Setting up DevOps environment
+
+#Azure DevOps Account, signin- then select create new organisation.. continue, give organsiation a unique name..i.e avanti-org
+
+#check email confirmation
+
+#create DevOps project, give this a unique name i.e PROD-AVANTI-WEB since secure make sure this is a secure project and only want to limit access to the people within AVANTI select this as a private project. 
+
+#add ansible extension to organsiation. head to https://marketplace.visualstudio.com head to the Azure DevOps tab search ansible first extension recommended by Microsoft. select Get It Free.. then select organisation, dropdown and select organsiation.
+
+#NOTE: Only Project Collection Adminstrators or Organisation Owners can install.
+
+#Should see Install button and once installed should see the extension has been sucessfully installed. then head to organisation. 
+
+#Ppload and review code in Azure DevOps
+
+#DevOps Organisation, Porject Created, and ansible extension installed. next step add code.
+
+create git repo... clone, fork, or download code to environment. 
+
+#install git
+follow instructions for your OS
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+#review applcication code. 
+
+#cloan repo to local enviroment.. browse location to save this too
+mkdir web-ansible
+ls
+git clone "INSTERT URL HERE"
+
+#once complete view contents of the repo 
+
+#to push code in DevOps browse to the project created.. then cick on Repos
+
+once this is done use the section "Push an existing repository from command line"
+
+#Note: before push project, need to sucessfully autheticate to this repo. Microsoft advises use of persoanl access tokens for authentication.
+
+#to create a new personal access token, click on the User Icon on the top right of the screen, then select personal access token then select new token.
+#name token since admin on full account can choose access scope with a short expirery date. However, adding a personal access token to a user in the production enviroment will need to limit the scope of the permissions that the user can do and when the token will expire. 
+
+#select Scopes then Full access then create.
+
+
+#save access token to notepad will use this shortly.
+
+
+#in local enviroment create new working directory. 
+
+cd webapp-ansible
+ls
+ls -lart
+cd ..
+ls
+mkdir avanti
+#copy content from webapp ansible folder to this new folder, to issue the copy will issue copy command with the iclassid flag 
+cp -r webapp-ansible/azure-pipelines.yml webapp-ansible/WebApp webapp-ansible/iac webapp-ansible/README.md avanti
+cd avanti
+ls
+ls -lart
+
+#make sure git is initialised in new folder 
+git status
+#if no git will see a error, make sure in right folder 
+git init
+git status
+
+#to start tracking these files run git add
+git add --all
+#ensure files are not pending anymore 
+git status 
+#run git command to create snapshot 
+git commit "initial commit" --all
+#run git remote add
+git remote add origin
+
+#Note: This will be a new deploy will prompt for access token we created earlier.. which represents password to organisation 
+
+#Note: This will be a new deploy will prompt for access token we created earlier.. which represents password to organisation. 
+
+#next run the git branch to set main as default branch 
+git branch -M main
+
+ #finally run the git push command to push the code in azure DevOps
+ git push -u origin main
+
+ #Note:Possible two errors, authenticaion faiiled.. current branch has no upstream branch.. to fix this rerun. 
+ #git branch -M main
+ #git push -u origin main
+
+#Once push has been completed, we should be able to view the app code. back to DevOps project and click on Repos. 
+
+#back to folder iac in this folder create_app_service.yml created a basic ansible playbook. this was create a azure app service which is where we will deploy application too. 
+
+#this script two modules, these are ansible modules, ansible modules are used to automate the ansible playbook, the first module is create a resoruce group module. second module is create an azure app service module. these two modules are going to be responsible for creating the infastrucutre that we need in azure. 
+
+#other folder contains basic .net framework application. MVC app, model, view controller app and its corresponding view. in index view, basic html tags to have some freindly text to help us see application is deployed. next file is also written in yaml.
+
+# next file azure-pipelines.yml
+
+#common error when creating a organisation and trying to run some devOps pipelines. to run build and release pipelines in a new organisation, microsoft requires parallel jobs. When you create a azure pipeline you are defining it as a collection of jobs, this is why parallel jobs is required to run pipelines in azure. 
+
+request free grant and parallelism request fourm 
+https://forms.office.com/pages/responsepage.aspx?id=v4j5cvGGr0GRqy180BHbR63mUWPlq7NEsFZhkyH8jChUMlM3QzdDMFZOMkVBWU5BWFM3SDI2QlRBSC4u
+
+
+#azure-pipelines.yml script to easy understand language, this is responsible for the continuious integration portion.
+#first we have the trigger: section here we send to main branch, which means when new commit happens iin the main branch, this pipeline will kick off.
+
+#next section is varibles: this can be varibles used in multiple steps in the pipeline itself
+
+#next section is steps: this will be the ordered tasks going to be performed to build pipeline out. first is nugettooinstall, responsibe for downloading latest version of Nuget
+second task is the nuget command..restoring packages that are dependent and needed to run application. 
+# third task fully build application, look for sln file common for .net framework. 
+# next task copy all files to the staging directory used to run web app. 
+# next task archieve files to be copied over in the staging directory, frome here create a zip folder that contains all the necessary files needed to run the application. 
+#finally publish zip file as artifact, remember a artifact is a packaged version of the code. in this case the zip folder. 
+
+next run pipeline.. on breadcrumb click Files, Set up build, then Run 
+#once job has started should be able to see a summary with a artifact being produced in post job progress. 
+
+#4 things accomplished 
+#1 create Azure DevOps organisation and project 
+#2 install ansible extension to an organsiation 
+#3 git commands to cloan,deploy and review code public repo to local environment, push code to DevOps organsiation  
+#4 reviewed and created Azure build Pipelines 
+
+
+#Note encounter no hosted parallelism when running pipeline microsoft require a parallelism request fourm. takes 2-3 days will send email to confrim grant. 
+
+
+
+

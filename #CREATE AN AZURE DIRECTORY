@@ -1,0 +1,84 @@
+
+#service principle 
+
+#create servive principle in azurecell as bash
+az ad sp create-for-rbac --name sp_avanti
+
+#"appId": "5cc9b5cd-ef88-41bd-938a-6b705e35c7cb",
+# "displayName": "sp_avanti",
+# "password": "1V48Q~fx5STPc52dqclCGesuS7qfKPwpUY5SUdtL",
+# "tenant": "cc3a8946-7b77-4292-804e-febc55cc3b42"
+
+#run Az command with subscription filter to get subscriptionid
+az account show --query '{subscriptionid:id}';
+
+#"subscriptionid": "21d5f074-76f5-4c1a-9230-b595427a7a0a"
+
+#assign service principle to ubuntu virtual machine commands below to make repo 
+
+[default]
+subscription_id=21d5f074-76f5-4c1a-9230-b595427a7a0a
+client_id=5cc9b5cd-ef88-41bd-938a-6b705e35c7cb
+secret=1V48Q~fx5STPc52dqclCGesuS7qfKPwpUY5SUdtL
+tenant=cc3a8946-7b77-4292-804e-febc55cc3b42
+
+#back to vm
+whoami 
+hostname
+
+#CREATE AN AZURE DIRECTORY
+mkdir ~/.azure
+
+#CREATE A CREDENTIALS FILE
+vi ~/.azure/credentials
+
+i
+:wq!
+
+#add following
+
+[default]
+subscription_id=<your-subscription_id>
+client_id=<security-principal-appid>
+secret=<security-principal-password>
+tenant=<security-principal-tenant>
+
+# create resource group. check out azure_resource_group.yml
+
+#Make sure to go to Azure portal and app registration.. once service principle has been created..select the app..
+#Make sure to grant permissions, Powerama.. IAM Access control.. owner.. members..User,group, or service principle.. add the app registation...
+
+vi verifyansible.yml
+ansible-playbook verifyansible.yml
+
+#create a private and public ssh key pair
+
+ssh-keygen -t rsa
+
+#grant execute permissions to owner (virtual machine)
+chmod 755 ~/.ssh 
+
+#set read only permissions to the authorized_keys file
+
+touch ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys
+
+
+next we want to ssh to the ubuntu virtual machine without entering our password
+ssh-copy-id <username_of_your_virtual_machine>@127.0.0.1
+
+
+#Create Ansible credentials file
+mkdir ~/.azure
+vi ~/.azure/credentials
+
+#insert the following lines into the file. Replace the placeholders with the service principal values.
+
+[default]
+subscription_id=<subscription_id>
+client_id=<service_principal_app_id>
+secret=<service_principal_password>
+tenant=<service_principal_tenant_id>
+
+#Make sure to go to Azure portal and app registration.. once service principle has been created..select the app..
+#Make sure to grant permissions, Powerama.. IAM Access control.. owner.. members..User,group, or service principle.. add the app registation...

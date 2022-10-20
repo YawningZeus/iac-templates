@@ -1,0 +1,6 @@
+#azure SSH service connection. 
+
+#create service connection for the ansible control-node, which is our Ubuntu virtual machine that has been created. This enables DevOps pipelines to execute and run ansible playbooks on control node, need to establish ssh service connection.
+
+
+#configure ssh on control node 

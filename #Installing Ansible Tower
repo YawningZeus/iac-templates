@@ -1,0 +1,31 @@
+#Installing Ansible Tower 
+
+#This is classed single-node installation with integrated database 
+# Needs a system installed with Linux ("bare metal", virtual machine, or cloud
+instance)
+#Red Hat Enterprise Linux or CentOS 7.4 or later
+#2 CPU / 4 GB RAM / at least 40 GB storage
+#On Amazon AWS EC2, can use m4.large instances
+
+
+#Standard Setup https://releases.ansible.com/ansible-tower/setup/
+
+wget https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-3.8.6-2.tar.gz
+tar xzvf ansible-tower-setup-3.8.6-2
+cd ansible-tower-setup-3.8.6-2
+ls
+vim inventory 
+#Edit the inventory file to set passwords for the Ansible Tower admin account
+#(admin password), the PostgreSQL database, user account (pg password), and the 
+# RabbitMQ messaging user account (rabbitmg password).
+sudo ./setup.sh
+#After the installer finishes successfully, connect to the Ansible Tower system with a
+web browser.
+#Login to the Ansible Tower web Ul as the Ansible Tower administrator (admin) using
+the password you set for admin_ password in the installer's inventory file.
+#When logging in to the Ansible Tower web Ul for the first time, you are prompted to
+enter a license and accept the end-user license agreement. Enter the Ansible Tower
+license provided by Red Hat and accept the end-user license agreement.
+# The Red Hat Ansible Tower Dashboard should be displayed.
+
+#ensure port 443! is open 
