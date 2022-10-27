@@ -4,23 +4,10 @@
 #create servive principle in azurecell as bash
 az ad sp create-for-rbac --name sp_avanti
 
-#"appId": "5cc9b5cd-ef88-41bd-938a-6b705e35c7cb",
-# "displayName": "sp_avanti",
-# "password": "1V48Q~fx5STPc52dqclCGesuS7qfKPwpUY5SUdtL",
-# "tenant": "cc3a8946-7b77-4292-804e-febc55cc3b42"
-
 #run Az command with subscription filter to get subscriptionid
 az account show --query '{subscriptionid:id}';
 
-#"subscriptionid": "21d5f074-76f5-4c1a-9230-b595427a7a0a"
-
 #assign service principle to ubuntu virtual machine commands below to make repo 
-
-[default]
-subscription_id=21d5f074-76f5-4c1a-9230-b595427a7a0a
-client_id=5cc9b5cd-ef88-41bd-938a-6b705e35c7cb
-secret=1V48Q~fx5STPc52dqclCGesuS7qfKPwpUY5SUdtL
-tenant=cc3a8946-7b77-4292-804e-febc55cc3b42
 
 #back to vm
 whoami 
